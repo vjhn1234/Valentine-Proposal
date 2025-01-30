@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine? 💖</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <div class="heart"></div>
+        <h1 id="question"></h1>
+        <div class="buttons">
+            <button id="yesBtn">Yes</button>
+            <button id="noBtn">No</button>
+        </div>
+        <p id="message"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+/* General Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: #ffebee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Falling Hearts Background */
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://media.giphy.com/media/3ohhwytHcusSCXXOUg/giphy.gif') repeat;
+    opacity: 0.2;
+    z-index: -1;
+}
+
+/* Proposal Container */
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+}
+
+/* Animated Heart */
+.heart {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    position: relative;
+    margin: 20px auto;
+    transform: rotate(-45deg);
+    animation: heartbeat 1s infinite;
+}
+
+.heart:before,
+.heart:after {
+    content: "";
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.heart:before {
+    top: -50px;
+    left: 0;
+}
+
+.heart:after {
+    left: 50px;
+    top: 0;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1) rotate(-45deg); }
+    50% { transform: scale(1.2) rotate(-45deg); }
+}
+
+/* Typing Effect */
+#question {
+    color: #e91e63;
+    font-size: 22px;
+    min-height: 50px;
+}
+
+/* Buttons */
+.buttons {
+    margin-top: 20px;
+}
+
+button {
+    background-color: #e91e63;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #c2185b;
+}
+
+/* Moving No Button */
+#noBtn {
+    position: absolute;
+}
+
+p {
+    font-size: 18px;
+    color: #d32f2f;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+// Typing effect for the question
+const questionText = "Will you be my Valentine? ❤️";
+let i = 0;
+function typeEffect() {
+    if (i < questionText.length) {
+        document.getElementById("question").innerHTML += questionText.charAt(i);
+        i++;
+        setTimeout(typeEffect, 100);
+    }
+}
+typeEffect();
+
+// Yes button response
+document.getElementById("yesBtn").addEventListener("click", function() {
+    document.getElementById("message").innerHTML = "Yay! You made me the happiest person ever! 💖🌹";
+    document.querySelector(".container").innerHTML += "<img src='https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif' width='200px' style='margin-top:10px;'>";
+});
+
+// No button movement logic
+let clickCount = 0;
+const noBtn = document.getElementById("noBtn");
+
+noBtn.addEventListener("mouseover", function() {
+    if (clickCount < 7) { 
+        let maxX = window.innerWidth - 120;  // Keep it inside the screen
+        let maxY = window.innerHeight - 80;
+        let x = Math.random() * maxX;
+        let y = Math.random() * maxY;
+        
+        this.style.position = "absolute";
+        this.style.left = `${x}px`;
+        this.style.top = `${y}px`;
+        
+        clickCount++;
+    } else {
+        this.innerText = "Okay fine, I say YES 😭💖";
+        this.style.backgroundColor = "#4CAF50"; // Turns green
+        this.style.pointerEvents = "none"; // Stops moving
+    }
+});
